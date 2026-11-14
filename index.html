@@ -1,0 +1,498 @@
+<!doctype html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>ABULSAMAD - Portfolio</title>
+    <link href="styles.css" rel="stylesheet" />
+    <style>
+      /* Skill card icons — simple line style, matches nav icon language */
+      .skill-card {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 0.75rem;
+        text-align: center;
+      }
+      .skill-icon {
+        width: 40px;
+        height: 40px;
+        stroke: currentColor;
+        stroke-width: 1.6;
+        fill: none;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+      }
+      .skill-bar-track {
+        width: 100%;
+        max-width: 140px;
+        height: 6px;
+        border-radius: 999px;
+        background: rgba(127, 127, 127, 0.25);
+        overflow: hidden;
+      }
+      .skill-bar-fill {
+        height: 100%;
+        width: var(--pct, 0%);
+        background: currentColor;
+        border-radius: 999px;
+      }
+      .skill-percent {
+        font-size: 0.75rem;
+        opacity: 0.7;
+      }
+    </style>
+    <style>
+      /* Scoped overrides for the portfolio page only — keeps the rest
+           of the site (nav, theme toggle) as-is, but replaces the
+           generic icon-card grid with something plainer and more personal. */
+
+      #portfolio .page-header {
+        text-align: left;
+        max-width: 640px;
+        margin: 4rem auto 0;
+        padding: 0 1.5rem;
+      }
+
+      #portfolio .page-header h1 {
+        font-size: 2rem;
+        font-weight: 600;
+      }
+
+      #portfolio .page-header p {
+        color: var(--text-secondary, #888);
+        font-style: italic;
+      }
+
+      .work-list {
+        max-width: 1100px;
+        margin: 3rem auto 6rem;
+        padding: 0 1.5rem;
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+        gap: 2.5rem 2rem;
+      }
+
+      .work-item {
+        padding-top: 0.25rem;
+      }
+
+      @media (max-width: 700px) {
+        .work-list {
+          grid-template-columns: 1fr;
+        }
+      }
+
+      /* Project screenshot. Optional — leave the <img> out entirely
+           on any project and the layout still works fine without it. */
+      .work-shot {
+        width: 100%;
+        aspect-ratio: 16 / 10;
+        object-fit: cover;
+        border-radius: 6px;
+        border: 1px solid var(--border-color, #ddd);
+        margin: 0.9rem 0 1rem;
+        display: block;
+        background: var(--bg-secondary, #f2f2f2);
+      }
+
+      /* Shown automatically if an image fails to load — keeps a
+           broken-image icon from showing up. */
+      .work-shot::before {
+        content: "";
+      }
+
+      .work-item h3 {
+        font-size: 1.15rem;
+        margin: 0 0 0.4rem;
+      }
+
+      .work-item p {
+        margin: 0 0 0.6rem;
+        line-height: 1.55;
+        max-width: 56ch;
+      }
+
+      .work-note {
+        font-size: 0.92rem;
+        color: var(--text-secondary, #777);
+        font-style: italic;
+      }
+
+      .work-stack {
+        font-size: 0.85rem;
+        color: var(--text-secondary, #999);
+        margin-top: 0.75rem;
+      }
+
+      .work-stack span::after {
+        content: " · ";
+      }
+
+      .work-stack span:last-child::after {
+        content: "";
+      }
+
+      @media (max-width: 520px) {
+        .work-item {
+          grid-template-columns: 32px 1fr;
+          gap: 0.75rem;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Theme Toggle Button -->
+    <button class="theme-toggle" id="themeToggle">
+      <svg
+        fill="none"
+        height="24"
+        stroke="currentColor"
+        stroke-width="2"
+        viewbox="0 0 24 24"
+        width="24"
+      >
+        <circle cx="12" cy="12" r="5"></circle>
+        <line x1="12" x2="12" y1="1" y2="3"></line>
+        <line x1="12" x2="12" y1="21" y2="23"></line>
+        <line x1="4.22" x2="5.64" y1="4.22" y2="5.64"></line>
+        <line x1="18.36" x2="19.78" y1="18.36" y2="19.78"></line>
+        <line x1="1" x2="3" y1="12" y2="12"></line>
+        <line x1="21" x2="23" y1="12" y2="12"></line>
+        <line x1="4.22" x2="5.64" y1="19.78" y2="18.36"></line>
+        <line x1="18.36" x2="19.78" y1="5.64" y2="4.22"></line>
+      </svg>
+    </button>
+    <!-- Navigation Sidebar -->
+    <nav class="sidebar">
+      <a class="nav-icon active" href="#home" title="Home">
+        <svg fill="currentColor" height="24" viewbox="0 0 24 24" width="24">
+          <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"></path>
+        </svg>
+      </a>
+      <a class="nav-icon" href="#about" title="About">
+        <svg fill="currentColor" height="24" viewbox="0 0 24 24" width="24">
+          <path
+            d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"
+          ></path>
+        </svg>
+      </a>
+      <a class="nav-icon" href="#portfolio" title="Portfolio">
+        <svg fill="currentColor" height="24" viewbox="0 0 24 24" width="24">
+          <path
+            d="M20 6h-4V4c0-1.11-.89-2-2-2h-4c-1.11 0-2 .89-2 2v2H4c-1.11 0-1.99.89-1.99 2L2 19c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V8c0-1.11-.89-2-2-2zm-6 0h-4V4h4v2z"
+          ></path>
+        </svg>
+      </a>
+      <a class="nav-icon" href="#contact" title="Contact">
+        <svg fill="currentColor" height="24" viewbox="0 0 24 24" width="24">
+          <path
+            d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"
+          ></path>
+        </svg>
+      </a>
+    </nav>
+    <!-- Main Content -->
+    <main class="main-content" id="home">
+      <div class="hero-section">
+        <div class="profile-container">
+          <div class="profile-image">
+            <img
+              alt="Abdulsamad bashir"
+              src="Portrait with hand pose – 10 Nov 2026, 7.06 pm.png"
+            />
+            <div class="profile-status"></div>
+          </div>
+        </div>
+        <div class="hero-text">
+          <div class="greeting">
+            <span class="greeting-icon"></span>
+            <h1 class="name">I'M ABDULSAMAD</h1>
+          </div>
+          <h2 class="title"><b>FRONTEND DEVELOPER</b></h2>
+          <p class="description">
+            <em
+              >My name is Abdulsamad Bashir, and I am a dedicated Frontend
+              Developer with a strong focus on building high-quality,
+              responsive, and user-centric web applications. I specialize in
+              transforming design concepts into clean, efficient, and accessible
+              interfaces that deliver seamless user experiences across all
+              devices.</em
+            >
+          </p>
+          <div class="socials">
+            <a href="#"><i class="fab fa-linkedin"></i></a>
+            <a href="#"><i class="fab fa-github"></i></a>
+            <a href="#"><i class="fab fa-phone"></i></a>
+            <a href="#"><i class="fab fa-whatsapp"></i></a>
+          </div>
+        </div>
+      </div>
+    </main>
+    <section id="about">
+      <header class="page-header">
+        <h1><b>About Me</b></h1>
+        <p>Passionate Frontend Developer</p>
+      </header>
+      <div class="about-content">
+        <!-- Skills Section -->
+        <section class="skills-section">
+          <h2 class="section-title">My Skills</h2>
+          <div class="skills-grid">
+            <div class="skill-card">
+              <svg class="skill-icon" viewbox="0 0 24 24">
+                <polyline points="8 4 3 12 8 20"></polyline>
+                <polyline points="16 4 21 12 16 20"></polyline>
+              </svg>
+              <h3>HTML</h3>
+              <div class="skill-bar-track">
+                <div class="skill-bar-fill" style="--pct: 90%"></div>
+              </div>
+              <span class="skill-percent">90%</span>
+            </div>
+            <div class="skill-card">
+              <svg class="skill-icon" viewbox="0 0 24 24">
+                <circle cx="12" cy="12" r="9"></circle>
+                <path d="M12 3c2.5 2.5 2.5 15.5 0 18"></path>
+                <path d="M3 12h18"></path>
+              </svg>
+              <h3>CSS</h3>
+              <div class="skill-bar-track">
+                <div class="skill-bar-fill" style="--pct: 85%"></div>
+              </div>
+              <span class="skill-percent">80%</span>
+            </div>
+            <div class="skill-card">
+              <svg class="skill-icon" viewbox="0 0 24 24">
+                <path
+                  d="M9 3c-2 0-3 1-3 3v3c0 1-1 2-2 2 1 0 2 1 2 2v3c0 2 1 3 3 3"
+                ></path>
+                <path
+                  d="M15 3c2 0 3 1 3 3v3c0 1 1 2 2 2-1 0-2 1-2 2v3c0 2-1 3-3 3"
+                ></path>
+              </svg>
+              <h3>JAVASCRIPT</h3>
+              <div class="skill-bar-track">
+                <div class="skill-bar-fill" style="--pct: 80%"></div>
+              </div>
+              <span class="skill-percent">40%</span>
+            </div>
+            <div class="skill-card">
+              <svg class="skill-icon" viewbox="0 0 24 24">
+                <polyline points="4 5 10 12 4 19"></polyline>
+                <line x1="12" x2="20" y1="19" y2="19"></line>
+              </svg>
+              <h3>PYTHON</h3>
+              <div class="skill-bar-track">
+                <div class="skill-bar-fill" style="--pct: 75%"></div>
+              </div>
+              <span class="skill-percent">60%</span>
+            </div>
+            <div class="skill-card">
+              <svg class="skill-icon" viewbox="0 0 24 24">
+                <circle cx="12" cy="12" r="2"></circle>
+                <ellipse cx="12" cy="12" rx="10" ry="4.2"></ellipse>
+                <ellipse
+                  cx="12"
+                  cy="12"
+                  rx="10"
+                  ry="4.2"
+                  transform="rotate(60 12 12)"
+                ></ellipse>
+                <ellipse
+                  cx="12"
+                  cy="12"
+                  rx="10"
+                  ry="4.2"
+                  transform="rotate(120 12 12)"
+                ></ellipse>
+              </svg>
+              <h3>REACT</h3>
+              <div class="skill-bar-track">
+                <div class="skill-bar-fill" style="--pct: 70%"></div>
+              </div>
+              <span class="skill-percent">40%</span>
+            </div>
+          </div>
+        </section>
+        <script src="script.js"></script>
+      </div>
+    </section>
+    <section id="portfolio">
+      <header class="page-header">
+        <h1>Things I've built</h1>
+        <p>
+          A handful of projects, roughly in the order I'm most proud of them.
+        </p>
+      </header>
+      <main class="work-list">
+        <div class="work-item">
+          <div>
+            <h3>E-Commerce Platform - Tajstore.brand</h3>
+            <img
+              alt="E-Commerce Platform interface screenshot"
+              class="work-shot"
+              src="ecommerce.jpeg"
+            />
+            <p>
+              A full-stack store with Stripe checkout, inventory tracking, and a
+              live analytics dashboard for the seller side. The hardest part
+              wasn't the payments — it was getting stock counts to stay accurate
+              under concurrent orders.
+            </p>
+            <div class="work-stack">
+              <span>HTML</span><span>CSS</span><span>javascript</span
+              ><span>Stripe</span>
+            </div>
+          </div>
+        </div>
+        <div class="work-item">
+          <div></div>
+        </div>
+        <div class="work-item">
+          <div></div>
+        </div>
+        <div class="work-item">
+          <div></div>
+        </div>
+        <div class="work-item">
+          <div></div>
+        </div>
+        <div class="work-item">
+          <div></div>
+        </div>
+        <div class="work-item">
+          <div></div>
+        </div>
+        <div class="work-item">
+          <div></div>
+        </div>
+        <div class="work-item">
+          <div></div>
+        </div>
+      </main>
+    </section>
+    <section id="contact">
+      <header class="page-header">
+        <h1>Get In Touch</h1>
+        <p>Let's Work Together</p>
+      </header>
+      <div class="contact-content">
+        <!-- Contact Information -->
+        <div class="contact-info">
+          <h2>Contact Information</h2>
+          <div class="contact-item">
+            <div class="contact-icon">
+              <svg
+                fill="none"
+                height="24"
+                stroke="currentColor"
+                stroke-width="2"
+                viewbox="0 0 24 24"
+                width="24"
+              >
+                <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                <circle cx="12" cy="10" r="3"></circle>
+              </svg>
+            </div>
+            <div class="contact-details">
+              <h3>Address</h3>
+              <p>1150 Sani mainagge<br />Kano, Nigeria</p>
+            </div>
+          </div>
+          <div class="contact-item">
+            <div class="contact-icon">
+              <svg
+                fill="none"
+                height="24"
+                stroke="currentColor"
+                stroke-width="2"
+                viewbox="0 0 24 24"
+                width="24"
+              >
+                <path
+                  d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"
+                ></path>
+              </svg>
+            </div>
+            <div class="contact-details">
+              <h3>Phone</h3>
+              <p>+2347085877186</p>
+            </div>
+          </div>
+          <div class="contact-item">
+            <div class="contact-icon">
+              <svg
+                fill="none"
+                height="24"
+                stroke="currentColor"
+                stroke-width="2"
+                viewbox="0 0 24 24"
+                width="24"
+              >
+                <path
+                  d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"
+                ></path>
+                <polyline points="22,6 12,13 2,6"></polyline>
+              </svg>
+            </div>
+            <div class="contact-details">
+              <h3>Email</h3>
+              <p>Abdulsamadbashir7@gmail.com</p>
+            </div>
+          </div>
+          <div class="contact-item">
+            <div class="contact-icon">
+              <svg
+                fill="none"
+                height="24"
+                stroke="currentColor"
+                stroke-width="2"
+                viewbox="0 0 24 24"
+                width="24"
+              >
+                <rect height="20" rx="5" ry="5" width="20" x="2" y="2"></rect>
+                <path
+                  d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"
+                ></path>
+                <line x1="17.5" x2="17.51" y1="6.5" y2="6.5"></line>
+              </svg>
+            </div>
+            <div class="contact-details">
+              <h3>Social Media</h3>
+              <p>
+                linkedin.com/in/abdulsamadbashir | GitHub.io/blaxkmamba7 |
+                Twitter
+              </p>
+            </div>
+          </div>
+        </div>
+        <!-- Contact Form -->
+        <div class="contact-form">
+          <h2>Send Me a Message</h2>
+          <form id="contactForm">
+            <div class="form-group">
+              <label for="name">Your Name</label>
+              <input id="name" name="name" required="" type="text" />
+            </div>
+            <div class="form-group">
+              <label for="email">Your Email</label>
+              <input id="email" name="email" required="" type="email" />
+            </div>
+            <div class="form-group">
+              <label for="subject">Subject</label>
+              <input id="subject" name="subject" required="" type="text" />
+            </div>
+            <div class="form-group">
+              <label for="message">Your Message</label>
+              <textarea id="message" name="message" required=""></textarea>
+            </div>
+            <button class="submit-button" type="submit">Send Message</button>
+          </form>
+        </div>
+      </div>
+    </section>
+    <script src="script.js"></script>
+  </body>
+</html>
